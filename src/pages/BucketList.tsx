@@ -415,6 +415,7 @@ function BucketCard({
         confirmingDelete && 'border-red-400/40 bg-red-400/5',
       )}
     >
+      {/* タイトル行 */}
       <div className="flex items-start gap-3">
         <button
           onClick={() => onToggle(item.id)}
@@ -447,93 +448,6 @@ function BucketCard({
               <span className="opacity-15">{'⭐'.repeat(5 - item.desireLevel)}</span>
             </span>
           </div>
-
-          {!collapsed && (
-            <>
-              {item.done && (
-                <MemoEditor
-                  memo={item.completionMemo}
-                  onSave={(m) => onUpdateMemo(item.id, m)}
-                />
-              )}
-
-              {!item.done && (
-                <div className="mt-3 space-y-1.5">
-                  <div className="flex items-start gap-2 text-xs">
-                    <span className="text-white/25 w-4 text-center shrink-0 mt-0.5">📅</span>
-                    <span className="text-white/30 w-10 shrink-0 mt-0.5">期限</span>
-                    <div className="flex flex-col gap-0.5">
-                      <span className="text-white/70">{item.deadline || '未設定'}</span>
-                      {deadlineInfo && (
-                        <span className="text-white/35">
-                          {deadlineInfo.ageAt !== null && `${deadlineInfo.ageAt}歳`}
-                          {deadlineInfo.ageAt !== null && ' · '}
-                          {deadlineInfo.daysLeft >= 0
-                            ? `あと${new Intl.NumberFormat('ja-JP').format(deadlineInfo.daysLeft)}日`
-                            : `${Math.abs(deadlineInfo.daysLeft)}日超過`}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2 text-xs">
-                    <Clock size={11} className="text-white/25 w-4 shrink-0" />
-                    <span className="text-white/30 w-10 shrink-0">日数</span>
-                    <span className="text-white/70">{item.durationDays > 0 ? `${item.durationDays}日間` : '未設定'}</span>
-                  </div>
-                  {deadlineLabel && (
-                    <div className="flex items-center gap-2 text-xs">
-                      <span className="text-white/25 w-4 text-center shrink-0">💡</span>
-                      <span className="text-white/30 w-10 shrink-0">推奨</span>
-                      <span className="text-amber-400/70">{deadlineLabel}までに</span>
-                    </div>
-                  )}
-                  {(item.companions || item.budget > 0 || item.suggestReason) && (
-                    <div className="space-y-1.5">
-                      {item.companions && (
-                        <div className="flex items-center gap-2 text-xs">
-                          <Users size={11} className="text-white/25 w-4 shrink-0" />
-                          <span className="text-white/30 w-10 shrink-0">誰と</span>
-                          <span className="text-white/70">{item.companions}</span>
-                        </div>
-                      )}
-                      {item.budget > 0 && (
-                        <div className="flex items-center gap-2 text-xs">
-                          <span className="text-white/25 w-4 text-center shrink-0">💰</span>
-                          <span className="text-white/30 w-10 shrink-0">予算</span>
-                          <span className="text-white/70">{fmt(item.budget)}</span>
-                        </div>
-                      )}
-                      {item.suggestReason && (
-                        <div className="flex items-start gap-2 text-xs">
-                          <FileText size={11} className="text-white/25 w-4 shrink-0 mt-0.5" />
-                          <span className="text-white/30 w-10 shrink-0">メモ</span>
-                          <span className="text-white/50 leading-relaxed">{item.suggestReason}</span>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {confirmingDelete && (
-                <div className="mt-3 flex items-center gap-3 bg-red-400/10 border border-red-400/20 rounded-xl px-3 py-2">
-                  <p className="text-xs text-red-300 flex-1">本当に削除しますか？</p>
-                  <button
-                    onClick={() => onConfirmDelete(item.id)}
-                    className="text-xs font-semibold text-red-400 hover:text-red-300 transition-colors"
-                  >
-                    削除
-                  </button>
-                  <button
-                    onClick={onCancelDelete}
-                    className="text-xs text-white/40 hover:text-white transition-colors"
-                  >
-                    キャンセル
-                  </button>
-                </div>
-              )}
-            </>
-          )}
         </div>
 
         <div className="flex items-center gap-1 shrink-0">
@@ -564,6 +478,89 @@ function BucketCard({
           </button>
         </div>
       </div>
+
+      {/* 詳細・削除確認（カード全幅） */}
+      {!collapsed && (
+        <>
+          {item.done && (
+            <div className="mt-2">
+              <MemoEditor
+                memo={item.completionMemo}
+                onSave={(m) => onUpdateMemo(item.id, m)}
+              />
+            </div>
+          )}
+
+          {!item.done && (
+            <div className="mt-3 grid grid-cols-2 gap-x-4 gap-y-1.5">
+              <div className="flex items-start gap-2 text-xs col-span-2">
+                <span className="text-white/25 shrink-0 mt-0.5">📅</span>
+                <span className="text-white/30 shrink-0 mt-0.5">期限</span>
+                <span className="text-white/70">{item.deadline || '未設定'}</span>
+                {deadlineInfo && (
+                  <span className="text-white/35 ml-1">
+                    {deadlineInfo.ageAt !== null && `${deadlineInfo.ageAt}歳 · `}
+                    {deadlineInfo.daysLeft >= 0
+                      ? `あと${new Intl.NumberFormat('ja-JP').format(deadlineInfo.daysLeft)}日`
+                      : `${Math.abs(deadlineInfo.daysLeft)}日超過`}
+                  </span>
+                )}
+              </div>
+              <div className="flex items-center gap-2 text-xs">
+                <Clock size={11} className="text-white/25 shrink-0" />
+                <span className="text-white/30 shrink-0">日数</span>
+                <span className="text-white/70">{item.durationDays > 0 ? `${item.durationDays}日間` : '未設定'}</span>
+              </div>
+              {item.budget > 0 && (
+                <div className="flex items-center gap-2 text-xs">
+                  <span className="text-white/25 shrink-0">💰</span>
+                  <span className="text-white/30 shrink-0">予算</span>
+                  <span className="text-white/70">{fmt(item.budget)}</span>
+                </div>
+              )}
+              {deadlineLabel && (
+                <div className="flex items-center gap-2 text-xs">
+                  <span className="text-white/25 shrink-0">💡</span>
+                  <span className="text-white/30 shrink-0">推奨</span>
+                  <span className="text-amber-400/70">{deadlineLabel}までに</span>
+                </div>
+              )}
+              {item.companions && (
+                <div className="flex items-center gap-2 text-xs">
+                  <Users size={11} className="text-white/25 shrink-0" />
+                  <span className="text-white/30 shrink-0">誰と</span>
+                  <span className="text-white/70">{item.companions}</span>
+                </div>
+              )}
+              {item.suggestReason && (
+                <div className="flex items-start gap-2 text-xs col-span-2">
+                  <FileText size={11} className="text-white/25 shrink-0 mt-0.5" />
+                  <span className="text-white/30 shrink-0">メモ</span>
+                  <span className="text-white/50 leading-relaxed">{item.suggestReason}</span>
+                </div>
+              )}
+            </div>
+          )}
+
+          {confirmingDelete && (
+            <div className="mt-3 flex items-center gap-3 bg-red-400/10 border border-red-400/20 rounded-xl px-3 py-2">
+              <p className="text-xs text-red-300 flex-1">本当に削除しますか？</p>
+              <button
+                onClick={() => onConfirmDelete(item.id)}
+                className="text-xs font-semibold text-red-400 hover:text-red-300 transition-colors"
+              >
+                削除
+              </button>
+              <button
+                onClick={onCancelDelete}
+                className="text-xs text-white/40 hover:text-white transition-colors"
+              >
+                キャンセル
+              </button>
+            </div>
+          )}
+        </>
+      )}
     </article>
   )
 }
