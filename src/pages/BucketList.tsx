@@ -458,7 +458,7 @@ function BucketCard({
               )}
 
               {!item.done && (
-                <div className="mt-3 bg-white/4 border border-white/8 rounded-xl px-3 py-2.5 space-y-1.5">
+                <div className="mt-3 space-y-1.5">
                   <div className="flex items-start gap-2 text-xs">
                     <span className="text-white/25 w-4 text-center shrink-0 mt-0.5">📅</span>
                     <span className="text-white/30 w-10 shrink-0 mt-0.5">期限</span>
@@ -488,7 +488,7 @@ function BucketCard({
                     </div>
                   )}
                   {(item.companions || item.budget > 0 || item.suggestReason) && (
-                    <div className="border-t border-white/5 pt-1.5 space-y-1.5">
+                    <div className="space-y-1.5">
                       {item.companions && (
                         <div className="flex items-center gap-2 text-xs">
                           <Users size={11} className="text-white/25 w-4 shrink-0" />
