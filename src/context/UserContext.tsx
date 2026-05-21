@@ -151,6 +151,11 @@ export function UserProvider({ children }: { children: ReactNode }) {
 
   const signOut = useCallback(async () => {
     await supabase.auth.signOut()
+    // onAuthStateChange が発火しない場合のフォールバック
+    setUser(null)
+    setProfile(DEFAULT_PROFILE)
+    setIsFirstVisit(false)
+    setProfileModalOpen(false)
   }, [])
 
   const openProfileModal  = useCallback(() => setProfileModalOpen(true), [])

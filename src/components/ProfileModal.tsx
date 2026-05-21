@@ -169,7 +169,7 @@ export default function ProfileModal() {
         </div>
 
         {/* スクロール可能なフォーム本体 */}
-        <form onSubmit={handleSubmit} className="overflow-y-auto flex-1 px-6 py-5 space-y-7">
+        <form id="profile-form" onSubmit={handleSubmit} className="overflow-y-auto flex-1 px-6 py-5 space-y-7">
 
           {/* ── セクション 1: 基本情報 ── */}
           <div>
@@ -360,10 +360,13 @@ export default function ProfileModal() {
               {error}
             </p>
           )}
+        </form>
 
-          {/* 送信ボタン（スクロール内に含める） */}
+        {/* 送信ボタン（固定フッター） */}
+        <div className="px-6 pb-6 pt-3 shrink-0 border-t border-white/8">
           <button
             type="submit"
+            form="profile-form"
             className={clsx(
               'w-full py-3.5 rounded-2xl font-semibold text-sm text-white',
               'bg-gradient-to-r from-brand-orange to-amber-400',
@@ -374,7 +377,7 @@ export default function ProfileModal() {
           >
             {isFirstVisit ? '人生設計をスタート 🚀' : '保存する'}
           </button>
-        </form>
+        </div>
       </div>
     </div>
   )
