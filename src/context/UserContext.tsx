@@ -111,8 +111,12 @@ export function UserProvider({ children }: { children: ReactNode }) {
   }
 
   useEffect(() => {
+    // フォールバック: Supabase が応答しない場合でも5秒後にローディング解除
+    const timeout = setTimeout(() => setLoading(false), 5000)
+
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (_event, session) => {
+        clearTimeout(timeout)
         const u = session?.user ?? null
         setUser(u)
         if (u) {
@@ -125,7 +129,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
         setLoading(false)
       },
     )
-    return () => subscription.unsubscribe()
+    return () => { subscription.unsubscribe(); clearTimeout(timeout) }
   }, [])
 
   const updateProfile = useCallback(async (newProfile: UserProfile) => {
