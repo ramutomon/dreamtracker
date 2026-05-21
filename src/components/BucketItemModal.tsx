@@ -158,18 +158,22 @@ export default function BucketItemModal({ initial, onSave, onClose }: Props) {
     if (!searchOpen) return
     if (!user) { setSearchLoading(false); return }
     setSearchLoading(true)
-    supabase
-      .from('bucket_items')
-      .select('title,emoji,category,budget,deadline,activity_phase_id,suggest_reason')
-      .neq('user_id', user.id)
-      .eq('done', false)
-      .order('created_at', { ascending: false })
-      .limit(10)
-      .then(({ data }) => {
+    ;(async () => {
+      try {
+        const { data } = await supabase
+          .from('bucket_items')
+          .select('title,emoji,category,budget,deadline,activity_phase_id,suggest_reason')
+          .neq('user_id', user.id)
+          .eq('done', false)
+          .order('created_at', { ascending: false })
+          .limit(10)
         setSearchResults((data ?? []) as SearchResult[])
+      } catch {
+        // ignore
+      } finally {
         setSearchLoading(false)
-      })
-      .catch(() => setSearchLoading(false))
+      }
+    })()
   }, [searchOpen, user?.id])
 
   // キーワード検索（300ms デバウンス）
@@ -177,18 +181,22 @@ export default function BucketItemModal({ initial, onSave, onClose }: Props) {
     if (!searchOpen || !user || !searchQuery.trim()) return
     setSearchLoading(true)
     const timer = setTimeout(() => {
-      supabase
-        .from('bucket_items')
-        .select('title,emoji,category,budget,deadline,activity_phase_id,suggest_reason')
-        .neq('user_id', user.id)
-        .eq('done', false)
-        .ilike('title', `%${searchQuery}%`)
-        .limit(10)
-        .then(({ data }) => {
+      ;(async () => {
+        try {
+          const { data } = await supabase
+            .from('bucket_items')
+            .select('title,emoji,category,budget,deadline,activity_phase_id,suggest_reason')
+            .neq('user_id', user.id)
+            .eq('done', false)
+            .ilike('title', `%${searchQuery}%`)
+            .limit(10)
           setSearchResults((data ?? []) as SearchResult[])
+        } catch {
+          // ignore
+        } finally {
           setSearchLoading(false)
-        })
-        .catch(() => setSearchLoading(false))
+        }
+      })()
     }, 300)
     return () => clearTimeout(timer)
   }, [searchQuery, searchOpen, user?.id])
