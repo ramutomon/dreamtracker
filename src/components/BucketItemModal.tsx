@@ -495,24 +495,25 @@ export default function BucketItemModal({ initial, onSave, onClose }: Props) {
             {/* 予算・所要日数 */}
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <FieldLabel>予算 (円)</FieldLabel>
+                <FieldLabel>予算（万円）</FieldLabel>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-white/30 text-xs">¥</span>
                   <input
                     type="text"
                     inputMode="numeric"
                     pattern="[0-9]*"
-                    value={form.budget > 0 ? String(form.budget) : ''}
-                    placeholder="例：500000"
+                    value={form.budget > 0 ? String(Math.round(form.budget / 10000)) : ''}
+                    placeholder="例：50"
                     onChange={(e) => {
                       const raw = e.target.value.replace(/[^0-9]/g, '')
-                      set('budget', raw === '' ? 0 : Number(raw))
+                      set('budget', raw === '' ? 0 : Number(raw) * 10000)
                     }}
                     className={clsx(
-                      'w-full bg-white/5 border border-white/10 rounded-xl pl-7 pr-3 py-2.5 text-white text-sm',
+                      'w-full bg-white/5 border border-white/10 rounded-xl px-3 pr-10 py-2.5 text-white text-sm',
+                      'placeholder-white/20',
                       'focus:outline-none focus:border-brand-orange/60 focus:ring-1 focus:ring-brand-orange/20 transition-all',
                     )}
                   />
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-white/30 text-xs">万円</span>
                 </div>
               </div>
               <div>
