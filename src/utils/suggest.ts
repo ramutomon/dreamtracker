@@ -60,6 +60,6 @@ export function suggestedDeadlineText(
   const yearsLeft = phase.endAge - currentAge
   if (yearsLeft <= 0)  return '期限切れ間近！'
   if (yearsLeft <= 3)  return `今すぐ（${phase.label}寿命 残り${yearsLeft}年）`
-  if (yearsLeft <= 10) return `${phase.endAge}歳まで（残り${yearsLeft}年）`
-  return `${phase.endAge}歳まで`
+  if (yearsLeft <= 10) return `${phase.endAge}歳（残り${yearsLeft}年）`
+  return `${phase.endAge}歳`
 }
