@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx tsc *)",
+      "Bash(npm run *)",
+      "Bash(Remove-Item \"c:\\\\Users\\\\user\\\\Desktop\\\\Zero2Die\\\\src\\\\pages\\\\Finance.tsx\" -Force)",
+      "Bash(Remove-Item \"c:\\\\Users\\\\user\\\\Desktop\\\\Zero2Die\\\\src\\\\data\\\\finance.ts\" -Force)",
+      "Bash(Write-Output \"Deleted\")"
+    ]
+  }
+}
